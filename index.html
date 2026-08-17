@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#16161d" />
+  <title>Zodiac Sequence Tracker</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="app-shell">
+    <header class="app-header">
+      <div>
+        <p class="eyebrow">Sequence Planner</p>
+        <h1>Zodiac Sequence Tracker</h1>
+      </div>
+      <div id="dayBadge" class="day-badge">Day 1</div>
+    </header>
+
+    <section id="setupView" class="card setup-card">
+      <div class="section-heading">
+        <div>
+          <h2>Choose the initial 3 signs</h2>
+          <p>Select three different signs from left to right.</p>
+        </div>
+      </div>
+
+      <div class="initial-grid">
+        <label>
+          <span>First sign</span>
+          <select id="initial0"></select>
+        </label>
+        <label>
+          <span>Second sign</span>
+          <select id="initial1"></select>
+        </label>
+        <label>
+          <span>Third sign</span>
+          <select id="initial2"></select>
+        </label>
+      </div>
+
+      <div class="actions-row">
+        <button id="startBtn" class="btn primary">Start tracking</button>
+        <button id="clearSetupBtn" class="btn secondary">Clear</button>
+      </div>
+      <p id="setupError" class="error-text" role="alert"></p>
+    </section>
+
+    <section id="trackerView" class="tracker hidden">
+      <section class="card current-card">
+        <div class="section-heading split">
+          <div>
+            <h2>Current three days</h2>
+            <p>Your rolling three-sign window.</p>
+          </div>
+          <button id="resetBtn" class="btn danger">Reset all</button>
+        </div>
+        <div id="windowGrid" class="window-grid"></div>
+      </section>
+
+      <section class="card picker-card">
+        <div class="section-heading">
+          <div>
+            <h2>Choose the next sign</h2>
+            <p id="hintText"></p>
+          </div>
+        </div>
+        <div id="zodiacGrid" class="zodiac-grid"></div>
+      </section>
+
+      <section class="card sequence-card">
+        <div class="section-heading">
+          <div>
+            <h2>Sequences</h2>
+            <p>Five sequences, twelve unique signs each.</p>
+          </div>
+        </div>
+        <div id="sequenceList" class="sequence-list"></div>
+      </section>
+    </section>
+
+    <footer class="app-footer">
+      <span>Data is saved automatically in this browser.</span>
+      <button id="exportBtn" class="link-button">Export backup</button>
+      <label class="link-button file-label">Import backup<input id="importInput" type="file" accept="application/json,.json" /></label>
+    </footer>
+  </main>
+
+  <dialog id="confirmDialog">
+    <form method="dialog" class="dialog-card">
+      <h3>Reset everything?</h3>
+      <p>All days and sequences will be erased and the app will return to the setup screen.</p>
+      <div class="dialog-actions">
+        <button value="cancel" class="btn secondary">Cancel</button>
+        <button value="confirm" class="btn danger">Reset</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script src="app.js"></script>
+</body>
+</html>
