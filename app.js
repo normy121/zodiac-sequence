@@ -128,6 +128,24 @@ function addZodiac(name) {
   render();
 }
 
+function undoLastDay() {
+  while (state.sequences.length > 1 && state.sequences.at(-1).length === 0) {
+    state.sequences.pop();
+  }
+
+  if (state.sequences.flat().length <= 3) return;
+
+  state.sequences.at(-1).pop();
+  if (state.sequences.length > 1 && state.sequences.at(-1).length === 0) {
+    state.sequences.pop();
+  }
+
+  state.day = Math.max(1, state.day - 1);
+  state.window = state.sequences.flat().slice(-3);
+  saveState();
+  render();
+}
+
 function resetAll() {
   state = freshState();
   saveState();
@@ -218,6 +236,7 @@ function render() {
   setupView.classList.toggle("hidden", state.started);
   trackerView.classList.toggle("hidden", !state.started);
   if (!state.started) return;
+  $("undoBtn").disabled = state.sequences.flat().length <= 3;
   renderWindow();
   renderPicker();
   renderSequences();
@@ -256,6 +275,7 @@ async function importBackup(file) {
 
 $("startBtn").addEventListener("click", startInitial);
 $("clearSetupBtn").addEventListener("click", clearSetup);
+$("undoBtn").addEventListener("click", undoLastDay);
 $("resetBtn").addEventListener("click", () => confirmDialog.showModal());
 confirmDialog.addEventListener("close", () => {
   if (confirmDialog.returnValue === "confirm") resetAll();

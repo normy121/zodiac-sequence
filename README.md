@@ -10,6 +10,7 @@ A standalone English-only web version of the Zodiac Sequence Tracker.
 - A new sequence is unlocked after the previous sequence is complete.
 - For the first 2 positions of a new sequence, the previous sequence's last 2 signs are temporarily unavailable.
 - Rolling “Current three days” display.
+- Undo the most recent selection with the “Previous day” button, including across sequence boundaries.
 - Automatic browser storage via `localStorage`.
 - Export/import JSON backup.
 - Responsive layout for desktop and mobile browsers.
