@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="theme-color" content="#16161d" />
   <title>Zodiac Sequence Tracker</title>
-  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="styles.css?v=2" />
 </head>
 <body>
   <main class="app-shell">
@@ -55,7 +55,7 @@
             <p>Your rolling three-sign window.</p>
           </div>
           <div class="heading-actions">
-            <button id="undoBtn" class="btn secondary">Previous day</button>
+            <button id="undoBtn" class="btn secondary">Undo last entry</button>
             <button id="resetBtn" class="btn danger">Reset all</button>
           </div>
         </div>
@@ -85,8 +85,6 @@
 
     <footer class="app-footer">
       <span>Data is saved automatically in this browser.</span>
-      <button id="exportBtn" class="link-button">Export backup</button>
-      <label class="link-button file-label">Import backup<input id="importInput" type="file" accept="application/json,.json" /></label>
     </footer>
   </main>
 
@@ -101,6 +99,6 @@
     </form>
   </dialog>
 
-  <script src="app.js"></script>
+  <script src="app.js?v=2"></script>
 </body>
 </html>

@@ -199,8 +199,6 @@ select:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-s
   text-underline-offset: 3px;
   cursor: pointer;
 }
-.file-label input { display: none; }
-
 #hintText { color: var(--warning); }
 
 dialog {

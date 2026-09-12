@@ -128,20 +128,22 @@ function addZodiac(name) {
   render();
 }
 
-function undoLastDay() {
-  while (state.sequences.length > 1 && state.sequences.at(-1).length === 0) {
+function undoLastEntry() {
+  while (state.sequences.length > 1 && state.sequences[state.sequences.length - 1].length === 0) {
     state.sequences.pop();
   }
 
-  if (state.sequences.flat().length <= 3) return;
+  const entryCount = state.sequences.reduce((total, sequence) => total + sequence.length, 0);
+  if (entryCount <= 3) return;
 
-  state.sequences.at(-1).pop();
-  if (state.sequences.length > 1 && state.sequences.at(-1).length === 0) {
+  const activeSequence = state.sequences[state.sequences.length - 1];
+  activeSequence.pop();
+  if (state.sequences.length > 1 && activeSequence.length === 0) {
     state.sequences.pop();
   }
 
   state.day = Math.max(1, state.day - 1);
-  state.window = state.sequences.flat().slice(-3);
+  state.window = state.sequences.reduce((all, sequence) => all.concat(sequence), []).slice(-3);
   saveState();
   render();
 }
@@ -236,56 +238,19 @@ function render() {
   setupView.classList.toggle("hidden", state.started);
   trackerView.classList.toggle("hidden", !state.started);
   if (!state.started) return;
-  $("undoBtn").disabled = state.sequences.flat().length <= 3;
+  const entryCount = state.sequences.reduce((total, sequence) => total + sequence.length, 0);
+  $("undoBtn").disabled = entryCount <= 3;
   renderWindow();
   renderPicker();
   renderSequences();
 }
 
-function exportBackup() {
-  const blob = new Blob([JSON.stringify(state, null, 2)], { type: "application/json" });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = `zodiac-sequence-backup-${new Date().toISOString().slice(0,10)}.json`;
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-  URL.revokeObjectURL(url);
-}
-
-async function importBackup(file) {
-  try {
-    const text = await file.text();
-    const parsed = JSON.parse(text);
-    if (!parsed || !Array.isArray(parsed.sequences) || !Array.isArray(parsed.window)) throw new Error("Invalid backup");
-    state = {
-      day: Number.isFinite(parsed.day) ? parsed.day : 1,
-      started: Boolean(parsed.started),
-      sequences: parsed.sequences.slice(0, 5).map(s => Array.isArray(s) ? s.filter(n => zodiacByName(n)).slice(0, 12) : []),
-      window: parsed.window.filter(n => zodiacByName(n)).slice(-3)
-    };
-    saveState();
-    populateInitialSelects();
-    render();
-  } catch {
-    alert("That file is not a valid Zodiac Sequence backup.");
-  }
-}
-
 $("startBtn").addEventListener("click", startInitial);
 $("clearSetupBtn").addEventListener("click", clearSetup);
-$("undoBtn").addEventListener("click", undoLastDay);
+$("undoBtn").addEventListener("click", undoLastEntry);
 $("resetBtn").addEventListener("click", () => confirmDialog.showModal());
 confirmDialog.addEventListener("close", () => {
   if (confirmDialog.returnValue === "confirm") resetAll();
 });
-$("exportBtn").addEventListener("click", exportBackup);
-$("importInput").addEventListener("change", (event) => {
-  const file = event.target.files?.[0];
-  if (file) importBackup(file);
-  event.target.value = "";
-});
-
 populateInitialSelects();
 render();
